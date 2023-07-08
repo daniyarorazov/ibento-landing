@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cz">
 
 <head>
     <meta charset="UTF-8">
@@ -17,38 +17,48 @@
             <form name="submit-to-google-sheet">
                 <h2>Chceš vědět o akcích, <br>
                     které tě zajímají?</h2>
-                <input type="email" name="Email" placeholder="example@gmail.com">
+                <input type="email" name="Email" class="section__field" placeholder="example@gmail.com">
                 <span>Napiš své zájmy</span>
-                <textarea name="Wishes" placeholder="programování, startupy, umění......."></textarea>
+                <textarea name="Wishes" class="section__field"
+                    placeholder="programování, startupy, umění......."></textarea>
                 <span>Napiš akce, které se ti líbily, a proč</span>
-                <textarea name="Favorites" placeholder="programování, startupy, umění......."></textarea>
+                <textarea name="Favorites" class="section__field"
+                    placeholder="ENT talk kvůli skvělým lidem a Networkingu"></textarea>
                 <button type="submit">Sign-Up</button>
             </form>
         </div>
     </section>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwITIUoI1wXyZekMivwviLatljrtptgdiUVoTjYXPT0ajsTZWh68ORTBM-L8LbYaYSo/exec'
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwITIUoI1wXyZekMivwviLatljrtptgdiUVoTjYXPT0ajsTZWh68ORTBM-L8LbYaYSo/exec';
         const form = document.forms['submit-to-google-sheet'];
         const input = document.querySelector('input[name="Email"]');
         const textarea = document.querySelector('textarea[name="Wishes"]');
+        const textareaFavorites = document.querySelector('textarea[name="Favorites"]');
+        const allFields = document.querySelectorAll('.section__field');
 
         form.addEventListener('submit', e => {
-            e.preventDefault()
-            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-                .then(response => console.log('Success!', response))
-                .catch(error => console.error('Error!', error.message))
+            e.preventDefault();
 
-            Swal.fire({
-                title: 'Success!',
-                text: 'Thanks for your interest!',
-                icon: 'success',
-                confirmButtonText: 'Good'
-            })
-
-            input.value = '';
-            textarea.value = '';
-        })
+            if (allFields[0].value === '' || allFields[1].value === '' || allFields[2].value === '') {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please fill all fields!',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Thanks for your interest!',
+                    icon: 'success',
+                    confirmButtonText: 'Good'
+                });
+                input.value = '';
+                textarea.value = '';
+                textareaFavorites.value = '';
+            }
+        });
     </script>
 </body>
 
