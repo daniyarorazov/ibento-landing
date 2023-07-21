@@ -28,7 +28,7 @@
             </form>
         </div>
     </section>
-
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwITIUoI1wXyZekMivwviLatljrtptgdiUVoTjYXPT0ajsTZWh68ORTBM-L8LbYaYSo/exec';
         const form = document.forms['submit-to-google-sheet'];
@@ -48,17 +48,43 @@
                     confirmButtonText: 'Ok'
                 });
             } else {
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Thanks for your interest!',
-                    icon: 'success',
-                    confirmButtonText: 'Good'
-                });
-                input.value = '';
-                textarea.value = '';
-                textareaFavorites.value = '';
+
+                fetch(scriptURL, {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                    .then(response => isOkay(input.value))
+                    .catch(error => Swal.fire({
+                        title: 'Error!',
+                        text: 'Some errors',
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    }));
+
             }
         });
+
+        function isOkay(email) {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Thanks for your interest!',
+                icon: 'success',
+                confirmButtonText: 'Good'
+            })
+            console.log(email)
+            // Email.send({
+            //     SecureToken: "6bce9b00-dd59-46b0-a178-958c498042d2",
+            //     To: 'orazov.video@gmail.com',
+            //     From: "ibento.events.cz@gmail.com",
+            //     Subject: "This is the subject",
+            //     Body: "And this is the body"
+            // }).then(
+            //     message => alert(message)
+            // );
+            input.value = '';
+            textarea.value = '';
+            textareaFavorites.value = '';
+        }
     </script>
 </body>
 
