@@ -37,8 +37,12 @@
         const textareaFavorites = document.querySelector('textarea[name="Favorites"]');
         const allFields = document.querySelectorAll('.section__field');
 
+
+
         form.addEventListener('submit', e => {
             e.preventDefault();
+
+
 
             if (allFields[0].value === '' || allFields[1].value === '' || allFields[2].value === '') {
                 Swal.fire({
@@ -53,10 +57,10 @@
                     method: 'POST',
                     body: new FormData(form)
                 })
-                    .then(response => isOkay(input.value))
+                    .then(response => isOkay(input.value, input, textarea, textareaFavorites))
                     .catch(error => Swal.fire({
                         title: 'Error!',
-                        text: 'Some errors',
+                        text: error,
                         icon: 'error',
                         confirmButtonText: 'Ok'
                     }));
@@ -64,7 +68,13 @@
             }
         });
 
-        function isOkay(email) {
+        function isOkay(email, input, textarea, textareaFavorites) {
+            let ebody = `
+            <h1>Hi</h1>
+            <p>My name is ${input.value}</p>
+            <p>My wishes are ${textarea.value}</p>
+            <p>My favorites are ${textareaFavorites.value}</p>
+            `;
             Swal.fire({
                 title: 'Success!',
                 text: 'Thanks for your interest!',
@@ -72,15 +82,13 @@
                 confirmButtonText: 'Good'
             })
             console.log(email)
-            // Email.send({
-            //     SecureToken: "6bce9b00-dd59-46b0-a178-958c498042d2",
-            //     To: 'orazov.video@gmail.com',
-            //     From: "ibento.events.cz@gmail.com",
-            //     Subject: "This is the subject",
-            //     Body: "And this is the body"
-            // }).then(
-            //     message => alert(message)
-            // );
+            Email.send({
+                SecureToken: "6bce9b00-dd59-46b0-a178-958c498042d2",
+                To: email,
+                From: "ibento.events.cz@gmail.com",
+                Subject: "Thanks for your interest! Registration is successful!",
+                Body: ebody
+            });
             input.value = '';
             textarea.value = '';
             textareaFavorites.value = '';
